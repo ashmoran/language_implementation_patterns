@@ -1,6 +1,24 @@
 module GettingStarted
   module BasicParsing
     module LL1RecursiveDescentLexer
+
+      # Implements Pattern 2: LL(1) Recursive-Descent Lexer
+      #
+      # Note that there are two main differences from the example implementation:
+      #
+      # * I don't use a Token class (which is just a dumb struct in the Java
+      #   example), this can be more easily implemented in Ruby with simple hashes.
+      #
+      # * I set about solving this using standard Ruby iterators with blocks,
+      #   which makes some bits more idiomatic and some bits more complex. The
+      #   Java example looks ahead to the next character, whereas with blocks
+      #   we have to `redo` if we detect we've entered a different token type.
+      #   Because of this, the code has ended up with a State implementation,
+      #   albeit a slightly wacky one.
+      #
+      # * There's the minor difference that I forgot to allow parsing capital
+      #   letters in names. Oops.
+
       class ListLexer
         def initialize(input)
           @input = input
@@ -67,6 +85,7 @@ module GettingStarted
           singleton_class.send(:alias_method, :finish, :"finish_#{mode}")
         end
       end
+
     end
   end
 end
