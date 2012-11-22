@@ -18,10 +18,7 @@ module GettingStarted
           let(:input) { "" }
 
           specify {
-
-            expect(output).to be == [
-              { eof: nil }
-            ]
+            expect(output).to be == [ { eof: nil } ]
           }
         end
 
@@ -30,11 +27,17 @@ module GettingStarted
             let(:input) { "   " }
 
             specify {
-              expect(output).to be == [
-                { eof: nil }
-              ]
+              expect(output).to be == [ { eof: nil } ]
             }
           end
+        end
+
+        context "[" do
+          let(:input) { "[" }
+
+          specify {
+            expect(output).to be == [ { lbrack: "[" }, { eof: nil } ]
+          }
         end
       end
     end

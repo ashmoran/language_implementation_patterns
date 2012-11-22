@@ -7,7 +7,13 @@ module GettingStarted
         end
 
         def each(&block)
-          [ { eof: nil } ].each(&block)
+          @input.chars.each do |char|
+            case char
+            when "["
+              yield(lbrack: char)
+            end
+          end
+          yield(eof: nil)
         end
       end
     end
