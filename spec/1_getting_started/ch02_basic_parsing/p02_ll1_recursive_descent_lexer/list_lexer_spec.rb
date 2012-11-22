@@ -32,11 +32,27 @@ module GettingStarted
           end
         end
 
-        context "[" do
+        context "lbrack" do
           let(:input) { "[" }
 
           specify {
             expect(output).to be == [ { lbrack: "[" }, { eof: nil } ]
+          }
+        end
+
+        context "comma" do
+          let(:input) { "," }
+
+          specify {
+            expect(output).to be == [ { comma: "," }, { eof: nil } ]
+          }
+        end
+
+        context "rbrack" do
+          let(:input) { "]" }
+
+          specify {
+            expect(output).to be == [ { rbrack: "]" }, { eof: nil } ]
           }
         end
       end

@@ -11,6 +11,10 @@ module GettingStarted
             case char
             when "["
               yield(lbrack: char)
+            when ","
+              yield(comma: char)
+            when "]"
+              yield(rbrack: char)
             end
           end
           yield(eof: nil)
