@@ -25,7 +25,7 @@ module GettingStarted
         end
 
         context "blank string" do
-          context "spaces" do
+          context "spaces, tabs, newlines" do
             let(:input) { "   " }
 
             specify {
@@ -94,7 +94,7 @@ module GettingStarted
         end
 
         context "delimiters, separators, and spaces" do
-          let(:input) { " [ , , ] " }
+          let(:input) { " [ \t, \n, ] \n" }
 
           specify {
             expect(output).to be == [
