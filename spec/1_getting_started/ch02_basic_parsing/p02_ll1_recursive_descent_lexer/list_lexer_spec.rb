@@ -57,11 +57,21 @@ module GettingStarted
         end
 
         context "names" do
-          let(:input) { "a" }
+          context "single letter" do
+            let(:input) { "a" }
 
-          specify {
-            expect(output).to be == [ { name: "a" }, { eof: nil } ]
-          }
+            specify {
+              expect(output).to be == [ { name: "a" }, { eof: nil } ]
+            }
+          end
+
+          context "multi-letter" do
+            let(:input) { "abcdefghijklmnopqrstuvwxyz" }
+
+            specify {
+              expect(output).to be == [ { name: "abcdefghijklmnopqrstuvwxyz" }, { eof: nil } ]
+            }
+          end
         end
 
         context "delimiters, separators, and spaces" do
