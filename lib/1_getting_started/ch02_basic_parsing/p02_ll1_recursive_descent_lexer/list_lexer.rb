@@ -18,6 +18,12 @@ module GettingStarted
       #
       # * There's the minor difference that I forgot to allow parsing capital
       #   letters in names. Oops.
+      #
+      # ERRATA: I just realised that the whole point of LL(1) is to *look ahead*
+      # and therefore this implementation using blocks misses the point. Sight.
+      # Oh well, from the outside, it's behaviourally equivalent, ie passes all
+      # the same tests it would do if we weren't `redo`ing enumerator blocks.
+      # I'm not going to refactor it unless I have to.
 
       class ListLexer
         def initialize(input)
