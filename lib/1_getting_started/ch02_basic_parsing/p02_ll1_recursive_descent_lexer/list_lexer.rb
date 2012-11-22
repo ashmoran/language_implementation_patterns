@@ -7,11 +7,15 @@ module GettingStarted
         end
 
         def each(&block)
-          singleton_class.send(:alias_method, :match, :match_normal)
-          singleton_class.send(:alias_method, :finish, :finish_normal)
+          switch_to_mode(:normal)
 
           @input.chars.each do |char|
-            match(char, &block)
+            match_result =
+              catch :state_changed do
+                match(char, &block)
+              end
+
+            redo if match_result == :state_changed
           end
 
           finish(&block)
@@ -28,15 +32,20 @@ module GettingStarted
           when "]"
             yield(rbrack: char)
           when "a".."z"
-            singleton_class.send(:alias_method, :match, :match_name)
-            singleton_class.send(:alias_method, :finish, :finish_name)
+            switch_to_mode(:name)
             @name = char
           end
         end
 
-        def match_name(char)
-          @name << char
-          # singleton_class.send(:alias_method, :match, :match_normal)
+        def match_name(char, &block)
+          case char
+          when "a".."z"
+            @name << char
+          else
+            yield(name: @name)
+            switch_to_mode(:normal)
+            throw(:state_changed, :state_changed)
+          end
         end
 
         def finish_normal(&block)
@@ -46,6 +55,13 @@ module GettingStarted
         def finish_name(&block)
           yield(name: @name)
           yield(eof: nil)
+        end
+
+        # This is an insane way to implement the State pattern, but I've left it in purely
+        # because it's so ridiculous, and this is only the first pattern in the book
+        def switch_to_mode(mode)
+          singleton_class.send(:alias_method, :match, :"match_#{mode}")
+          singleton_class.send(:alias_method, :finish, :"finish_#{mode}")
         end
       end
     end
