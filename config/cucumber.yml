@@ -1,0 +1,6 @@
+<%
+std_opts = "--require features/support --require features/step_definitions"
+%>
+default: <%= std_opts %> --tags ~@wip --strict --format <%= ENV['CUCUMBER_FORMAT'] || 'progress' %>
+wip: <%= std_opts %> --tags @wip:3 --wip --format <%= ENV['CUCUMBER_FORMAT'] || 'pretty' %>
+guard: <%= std_opts %> --tags ~@no-guard --strict --format <%= ENV['CUCUMBER_FORMAT'] || 'progress' %>
