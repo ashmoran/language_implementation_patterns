@@ -10,97 +10,123 @@ module GettingStarted
 
         let(:output) { [ ] }
 
-        before(:each) do
+        def tokenize_all_input
           lexer.each do |token|
             output << token
           end
         end
 
-        context "empty string" do
-          let(:input) { "" }
+        context "valid input" do
+          before(:each) do
+            tokenize_all_input
+          end
 
-          specify {
-            expect(output).to be == [ { eof: nil } ]
-          }
-        end
-
-        context "blank string" do
-          context "spaces, tabs, newlines" do
-            let(:input) { "   " }
+          context "empty string" do
+            let(:input) { "" }
 
             specify {
               expect(output).to be == [ { eof: nil } ]
             }
           end
-        end
 
-        context "lbrack" do
-          let(:input) { "[" }
+          context "blank string" do
+            context "spaces, tabs, newlines" do
+              let(:input) { "   " }
 
-          specify {
-            expect(output).to be == [ { lbrack: "[" }, { eof: nil } ]
-          }
-        end
+              specify {
+                expect(output).to be == [ { eof: nil } ]
+              }
+            end
+          end
 
-        context "comma" do
-          let(:input) { "," }
-
-          specify {
-            expect(output).to be == [ { comma: "," }, { eof: nil } ]
-          }
-        end
-
-        context "rbrack" do
-          let(:input) { "]" }
-
-          specify {
-            expect(output).to be == [ { rbrack: "]" }, { eof: nil } ]
-          }
-        end
-
-        context "names" do
-          context "single letter" do
-            let(:input) { "a" }
+          context "lbrack" do
+            let(:input) { "[" }
 
             specify {
-              expect(output).to be == [ { name: "a" }, { eof: nil } ]
+              expect(output).to be == [ { lbrack: "[" }, { eof: nil } ]
             }
           end
 
-          context "multi-letter" do
-            let(:input) { "abcdefghijklmnopqrstuvwxyz" }
+          context "comma" do
+            let(:input) { "," }
 
             specify {
-              expect(output).to be == [ { name: "abcdefghijklmnopqrstuvwxyz" }, { eof: nil } ]
+              expect(output).to be == [ { comma: "," }, { eof: nil } ]
             }
           end
 
-          context "in a list" do
-            let(:input) { "[ a, xyz, bc ]" }
+          context "rbrack" do
+            let(:input) { "]" }
+
+            specify {
+              expect(output).to be == [ { rbrack: "]" }, { eof: nil } ]
+            }
+          end
+
+          context "names" do
+            context "single letter" do
+              let(:input) { "a" }
+
+              specify {
+                expect(output).to be == [ { name: "a" }, { eof: nil } ]
+              }
+            end
+
+            context "multi-letter" do
+              let(:input) { "abcdefghijklmnopqrstuvwxyz" }
+
+              specify {
+                expect(output).to be == [ { name: "abcdefghijklmnopqrstuvwxyz" }, { eof: nil } ]
+              }
+            end
+
+            context "in a list" do
+              let(:input) { "[ a, xyz, bc ]" }
+
+              specify {
+                expect(output).to be == [
+                  { lbrack: "[" },
+                  { name:   "a" },
+                  { comma:  "," },
+                  { name:   "xyz" },
+                  { comma:  "," },
+                  { name:   "bc" },
+                  { rbrack: "]" },
+                  { eof:    nil }
+                ]
+              }
+            end
+          end
+
+          context "delimiters, separators, and spaces" do
+            let(:input) { " [ \t, \n, ] \n" }
 
             specify {
               expect(output).to be == [
-                { lbrack: "[" },
-                { name:   "a" },
-                { comma:  "," },
-                { name:   "xyz" },
-                { comma:  "," },
-                { name:   "bc" },
-                { rbrack: "]" },
-                { eof:    nil }
+                { lbrack: "[" }, { comma: "," }, { comma: "," }, { rbrack: "]" }, { eof: nil }
               ]
             }
           end
         end
 
-        context "delimiters, separators, and spaces" do
-          let(:input) { " [ \t, \n, ] \n" }
+        context "invalid input" do
+          context "invalid characters" do
+            context "in normal context" do
+              let(:input) { "@" }
 
-          specify {
-            expect(output).to be == [
-              { lbrack: "[" }, { comma: "," }, { comma: "," }, { rbrack: "]" }, { eof: nil }
-            ]
-          }
+              specify {
+                expect { tokenize_all_input }.to raise_error(ArgumentError, "Invalid character: @")
+              }
+            end
+
+            context "in a name" do
+              let(:input) { "a$"}
+
+              specify {
+                expect { tokenize_all_input }.to raise_error(ArgumentError, "Invalid character: $")
+              }
+            end
+          end
         end
       end
     end

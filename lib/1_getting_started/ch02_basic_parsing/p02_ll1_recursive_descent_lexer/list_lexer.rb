@@ -25,6 +25,7 @@ module GettingStarted
 
         def match_normal(char, &block)
           case char
+          when " ", "\t", "\n"
           when "["
             yield(lbrack: char)
           when ","
@@ -34,6 +35,8 @@ module GettingStarted
           when "a".."z"
             switch_to_mode(:name)
             @name = char
+          else
+            raise ArgumentError.new("Invalid character: #{char}")
           end
         end
 
