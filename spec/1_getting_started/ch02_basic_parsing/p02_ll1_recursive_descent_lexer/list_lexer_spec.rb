@@ -55,6 +55,16 @@ module GettingStarted
             expect(output).to be == [ { rbrack: "]" }, { eof: nil } ]
           }
         end
+
+        context "delimiters, separators, and spaces" do
+          let(:input) { " [ , , ] " }
+
+          specify {
+            expect(output).to be == [
+              { lbrack: "[" }, { comma: "," }, { comma: "," }, { rbrack: "]" }, { eof: nil }
+            ]
+          }
+        end
       end
     end
   end
