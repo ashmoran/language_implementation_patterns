@@ -56,6 +56,14 @@ module GettingStarted
           }
         end
 
+        context "names" do
+          let(:input) { "a" }
+
+          specify {
+            expect(output).to be == [ { name: "a" }, { eof: nil } ]
+          }
+        end
+
         context "delimiters, separators, and spaces" do
           let(:input) { " [ , , ] " }
 

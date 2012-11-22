@@ -15,6 +15,8 @@ module GettingStarted
               yield(comma: char)
             when "]"
               yield(rbrack: char)
+            when "a".."z"
+              yield(name: char)
             end
           end
           yield(eof: nil)
