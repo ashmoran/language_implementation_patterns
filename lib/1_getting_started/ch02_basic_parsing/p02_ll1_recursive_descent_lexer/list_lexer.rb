@@ -52,7 +52,7 @@ module GettingStarted
             yield(rbrack: char)
           when "a".."z"
             switch_to_mode(:name)
-            @name = char
+            throw(:state_changed, :state_changed)
           else
             raise ArgumentError.new("Invalid character: #{char}")
           end
@@ -81,6 +81,8 @@ module GettingStarted
         # This is an insane way to implement the State pattern, but I've left it in purely
         # because it's so ridiculous, and this is only the first pattern in the book
         def switch_to_mode(mode)
+          @name = ""
+
           singleton_class.send(:alias_method, :match, :"match_#{mode}")
           singleton_class.send(:alias_method, :finish, :"finish_#{mode}")
         end
