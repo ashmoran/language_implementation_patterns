@@ -12,18 +12,6 @@ module GettingStarted
 
         subject(:parser) { ListParser.new(lexer) }
 
-        context "no list" do
-          let(:tokens) {
-            [
-              { eof: nil }
-            ]
-          }
-
-          specify {
-            expect { parser.list }.to raise_error(ArgumentError, "Expected :lbrack, found :eof")
-          }
-        end
-
         # The example in the book (deliberately?) avoids this case, but it's an obvious
         # TDD bootstrapping case, and turned out to be not too difficult to implement
         # compared to the Java example
@@ -96,6 +84,33 @@ module GettingStarted
           specify {
             expect(parser.list).to be == [ :a, [ :x, :y ], :b ]
           }
+        end
+
+        context "invalid input" do
+          context "no list" do
+            let(:tokens) {
+              [
+                { eof: nil }
+              ]
+            }
+
+            specify {
+              expect { parser.list }.to raise_error(ArgumentError, "Expected :lbrack, found :eof")
+            }
+          end
+
+          context "unclosed list" do
+            let(:tokens) {
+              [
+                { lbrack: "[" },
+                { eof: nil }
+              ]
+            }
+
+            specify {
+              expect { parser.list }.to raise_error(ArgumentError, "Expected :rbrack, found :eof")
+            }
+          end
         end
       end
     end
