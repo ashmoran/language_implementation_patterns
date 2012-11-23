@@ -24,6 +24,9 @@ module GettingStarted
           }
         end
 
+        # The example in the book (deliberately?) avoids this case, but it's an obvious
+        # TDD bootstrapping case, and turned out to be not too difficult to implement
+        # compared to the Java example
         context "empty list" do
           let(:tokens) {
             [
