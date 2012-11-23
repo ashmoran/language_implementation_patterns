@@ -1,6 +1,21 @@
 module GettingStarted
   module BasicParsing
     module LL1RecursiveDescentParser
+
+      # Implements Pattern 2: LL(1) Recursive-Descent Lexer
+      #
+      # Two major differences from the book examples:
+      #
+      # * We turn the tokens into a Ruby array (ie we do something with them
+      #   other than detect errors). This is pretty easy as we just need a
+      #   Collecting Parameter.
+      #
+      # * We handle the empty list case. I didn't notice this was excluded
+      #   from the grammar, but the discussion on p40 hints at why. Turns out
+      #   even in this simple case it's much harder to parse optional elements,
+      #   as it means we have to treat the first element of a list differently
+      #   (because "[ ]" is valid but "[ a, ]" is not, which is what a naive
+      #   parser gives you).
       class ListParser
         def initialize(lexer)
           @tokens = lexer.each
@@ -75,6 +90,7 @@ module GettingStarted
           token.values.first
         end
       end
+
     end
   end
 end
