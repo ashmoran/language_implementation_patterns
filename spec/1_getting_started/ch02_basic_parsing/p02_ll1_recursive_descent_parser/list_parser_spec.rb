@@ -108,7 +108,26 @@ module GettingStarted
             }
 
             specify {
-              expect { parser.list }.to raise_error(ArgumentError, "Expected :rbrack, found :eof")
+              expect { parser.list }.to raise_error(
+                ArgumentError, "Expected :lbrack, :name or :rbrack, found :eof"
+              )
+            }
+          end
+
+          context "missing name before a comma" do
+            let(:tokens) {
+              [
+                { lbrack: "[" },
+                { comma:  "," },
+                { rbrack: "]" },
+                { eof: nil }
+              ]
+            }
+
+            specify {
+              expect { parser.list }.to raise_error(
+                ArgumentError, "Expected :lbrack, :name or :rbrack, found :comma"
+              )
             }
           end
         end

@@ -30,6 +30,12 @@ module GettingStarted
             match(:name)
           when :lbrack
             collected_list << list
+          when :rbrack
+            return
+          else
+            raise ArgumentError.new(
+              "Expected :lbrack, :name or :rbrack, found #{type(@lookahead).inspect}"
+            )
           end
         end
 
