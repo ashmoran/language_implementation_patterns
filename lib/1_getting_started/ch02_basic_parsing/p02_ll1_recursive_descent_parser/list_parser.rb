@@ -17,6 +17,10 @@ module GettingStarted
 
         def elements(collected_list)
           element(collected_list)
+          while type(@lookahead) == :comma
+            match(:comma)
+            element(collected_list)
+          end
         end
 
         def element(collected_list)

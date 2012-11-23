@@ -52,6 +52,25 @@ module GettingStarted
             expect(parser.list).to be == [ :a ]
           }
         end
+
+        context "list with a multiple names" do
+          let(:tokens) {
+            [
+              { lbrack: "[" },
+              { name:   "a" },
+              { comma:  "," },
+              { name:   "b" },
+              { comma:  "," },
+              { name:   "c" },
+              { rbrack: "]" },
+              { eof:    nil }
+            ]
+          }
+
+          specify {
+            expect(parser.list).to be == [ :a, :b, :c ]
+          }
+        end
       end
     end
   end
