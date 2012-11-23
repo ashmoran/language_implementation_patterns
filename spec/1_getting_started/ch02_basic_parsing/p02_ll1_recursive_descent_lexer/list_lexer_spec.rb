@@ -19,9 +19,7 @@ module GettingStarted
         describe "#each" do
           let(:input) { "[a]" }
 
-          it "lets you enumerate manually" do
-            pending "To do pattern 3 correctly, we need this interface to the lexer"
-
+          it "lets you enumerate manually so we can use this like the book example expects" do
             tokens = lexer.each
             loop do
               begin

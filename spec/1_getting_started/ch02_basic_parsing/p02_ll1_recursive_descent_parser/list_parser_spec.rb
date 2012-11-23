@@ -7,6 +7,18 @@ require '1_getting_started/ch02_basic_parsing/p02_ll1_recursive_descent_lexer/li
 module GettingStarted
   module BasicParsing
     module LL1RecursiveDescentParser
+      describe "Intergration:", ListParser, "and lexer" do
+        let(:input) { "[ a, [ x, [ i, j ] ], b ]" }
+
+        let(:lexer) { LL1RecursiveDescentLexer::ListLexer.new(input) }
+
+        subject(:parser) { ListParser.new(lexer) }
+
+        it "parses lists!" do
+          expect(parser.list).to be == [ :a, [ :x, [ :i, :j ] ], :b ]
+        end
+      end
+
       describe ListParser do
         let(:lexer) { mock(LL1RecursiveDescentLexer::ListLexer, each: tokens.each) }
 

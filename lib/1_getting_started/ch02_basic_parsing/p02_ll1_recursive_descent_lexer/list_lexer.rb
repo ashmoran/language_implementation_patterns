@@ -30,7 +30,24 @@ module GettingStarted
           @input = input
         end
 
+        # Kludge version of #each because I implemented this wrong first-time round:
+        # the block_given? check lets us keep the original examples while also
+        # providing the Enumerator the (properly-written) Parser needs
         def each(&block)
+          if block_given?
+            tokenize(&block)
+          else
+            [ ].tap do |tokens|
+              tokenize do |token|
+                tokens << token
+              end
+            end.each
+          end
+        end
+
+        private
+
+        def tokenize(&block)
           switch_to_mode(:normal)
 
           @input.chars.each do |char|
@@ -44,8 +61,6 @@ module GettingStarted
 
           finish(&block)
         end
-
-        private
 
         def match_normal(char, &block)
           case char
