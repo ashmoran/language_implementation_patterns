@@ -28,6 +28,8 @@ module GettingStarted
           when :name
             collected_list << text(@lookahead).to_sym
             match(:name)
+          when :lbrack
+            collected_list << list
           end
         end
 

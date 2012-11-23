@@ -74,6 +74,29 @@ module GettingStarted
             expect(parser.list).to be == [ :a, :b, :c ]
           }
         end
+
+        context "list of lists" do
+          let(:tokens) {
+            [
+              { lbrack: "[" },
+                { name:   "a" },
+                { comma:  "," },
+                  { lbrack: "[" },
+                    { name:   "x" },
+                    { comma:  "," },
+                    { name:   "y" },
+                  { rbrack: "]" },
+                { comma:  "," },
+                { name:   "b" },
+              { rbrack: "]" },
+              { eof:    nil }
+            ]
+          }
+
+          specify {
+            expect(parser.list).to be == [ :a, [ :x, :y ], :b ]
+          }
+        end
       end
     end
   end
