@@ -86,6 +86,33 @@ module GettingStarted
           }
         end
 
+        context "list of list of lists to prove to Bobby my code really works" do
+          let(:tokens) {
+            [
+              { lbrack: "[" },
+                { name:   "a" },
+                { comma:  "," },
+                  { lbrack: "[" },
+                    { name:   "x" },
+                    { comma:  "," },
+                      { lbrack: "[" },
+                        { name:   "i" },
+                        { comma:  "," },
+                        { name:   "j" },
+                      { rbrack: "]" },
+                  { rbrack: "]" },
+                { comma:  "," },
+                { name:   "b" },
+              { rbrack: "]" },
+              { eof:    nil }
+            ]
+          }
+
+          specify {
+            expect(parser.list).to be == [ :a, [ :x, [ :i, :j ] ], :b ]
+          }
+        end
+
         context "invalid input" do
           context "no list" do
             let(:tokens) {
