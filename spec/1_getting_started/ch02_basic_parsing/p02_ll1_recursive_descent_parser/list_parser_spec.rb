@@ -103,7 +103,7 @@ module GettingStarted
             let(:tokens) {
               [
                 { lbrack: "[" },
-                { eof: nil }
+                { eof:    nil }
               ]
             }
 
@@ -120,13 +120,31 @@ module GettingStarted
                 { lbrack: "[" },
                 { comma:  "," },
                 { rbrack: "]" },
-                { eof: nil }
+                { eof:    nil }
               ]
             }
 
             specify {
               expect { parser.list }.to raise_error(
                 ArgumentError, "Expected :lbrack, :name or :rbrack, found :comma"
+              )
+            }
+          end
+
+          context "missing name after a comma" do
+            let(:tokens) {
+              [
+                { lbrack: "[" },
+                { name:   "a" },
+                { comma:  "," },
+                { rbrack: "]" },
+                { eof:    nil }
+              ]
+            }
+
+            specify {
+              expect { parser.list }.to raise_error(
+                ArgumentError, "Expected :name or :lbrack, found :rbrack"
               )
             }
           end

@@ -16,10 +16,23 @@ module GettingStarted
         end
 
         def elements(collected_list)
-          element(collected_list)
+          first_element(collected_list)
           while type(@lookahead) == :comma
             match(:comma)
             element(collected_list)
+          end
+        end
+
+        def first_element(collected_list)
+          case type(@lookahead)
+          when :name, :lbrack
+            element(collected_list)
+          when :rbrack
+            return
+          else
+            raise ArgumentError.new(
+              "Expected :lbrack, :name or :rbrack, found #{type(@lookahead).inspect}"
+            )
           end
         end
 
@@ -30,11 +43,9 @@ module GettingStarted
             match(:name)
           when :lbrack
             collected_list << list
-          when :rbrack
-            return
           else
             raise ArgumentError.new(
-              "Expected :lbrack, :name or :rbrack, found #{type(@lookahead).inspect}"
+              "Expected :name or :lbrack, found #{type(@lookahead).inspect}"
             )
           end
         end
