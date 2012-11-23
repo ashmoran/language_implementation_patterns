@@ -16,6 +16,27 @@ module GettingStarted
           end
         end
 
+        describe "#each" do
+          let(:input) { "[a]" }
+
+          it "lets you enumerate manually" do
+            pending "To do pattern 3 correctly, we need this interface to the lexer"
+
+            tokens = lexer.each
+            loop do
+              begin
+                output << tokens.next
+              rescue StopIteration
+                break
+              end
+            end
+
+            expect(output).to be == [
+              { lbrack: "[" }, { name: "a" }, { rbrack: "]" }, { eof: nil }
+            ]
+          end
+        end
+
         context "valid input" do
           before(:each) do
             tokenize_all_input
