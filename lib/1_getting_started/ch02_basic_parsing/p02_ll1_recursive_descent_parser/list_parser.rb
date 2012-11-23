@@ -4,13 +4,27 @@ module GettingStarted
       class ListParser
         def initialize(lexer)
           @tokens = lexer.each
-          @lookahead = @tokens.next
+          @lookahead = @tokens.peek
         end
 
         def list
-          match(:lbrack)
-          match(:rbrack)
-          [ ]
+          [ ].tap do |collected_list|
+            match(:lbrack)
+            elements(collected_list)
+            match(:rbrack)
+          end
+        end
+
+        def elements(collected_list)
+          element(collected_list)
+        end
+
+        def element(collected_list)
+          case type(@lookahead)
+          when :name
+            collected_list << text(@lookahead).to_sym
+            match(:name)
+          end
         end
 
         private
@@ -26,11 +40,16 @@ module GettingStarted
         end
 
         def consume
-          @lookahead = @tokens.next
+          @tokens.next
+          @lookahead = @tokens.peek
         end
 
         def type(token)
           token.keys.first
+        end
+
+        def text(token)
+          token.values.first
         end
       end
     end

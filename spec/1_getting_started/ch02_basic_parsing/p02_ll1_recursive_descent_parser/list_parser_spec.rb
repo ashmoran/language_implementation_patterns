@@ -37,6 +37,21 @@ module GettingStarted
             expect(parser.list).to be == [ ]
           }
         end
+
+        context "list with a name" do
+          let(:tokens) {
+            [
+              { lbrack: "[" },
+              { name:   "a" },
+              { rbrack: "]" },
+              { eof:    nil }
+            ]
+          }
+
+          specify {
+            expect(parser.list).to be == [ :a ]
+          }
+        end
       end
     end
   end
