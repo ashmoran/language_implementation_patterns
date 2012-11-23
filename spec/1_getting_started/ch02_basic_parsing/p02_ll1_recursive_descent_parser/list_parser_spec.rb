@@ -20,7 +20,21 @@ module GettingStarted
           }
 
           specify {
-            expect(parser.list).to be_nil
+            expect { parser.list }.to raise_error(ArgumentError, "Expected :lbrack, found :eof")
+          }
+        end
+
+        context "empty list" do
+          let(:tokens) {
+            [
+              { lbrack: "[" },
+              { rbrack: "]" },
+              { eof:    nil }
+            ]
+          }
+
+          specify {
+            expect(parser.list).to be == [ ]
           }
         end
       end
