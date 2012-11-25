@@ -6,17 +6,16 @@ require_relative '../p03_ll1_recursive_descent_parser/list_parser_contract'
 
 module GettingStarted
   module BasicParsing
-    module LL1RecursiveDescentParser
+    module LLkRecursiveDescentParser
       describe "Intergration:", ListParserWithAssignment, "and lexer" do
-        let(:input) { "[ a, [ x, [ i, j ] ], b ]" }
+        let(:input) { "[ a = b ]" }
 
         let(:lexer) { LL1RecursiveDescentLexer::ListLexer.new(input) }
-
-        subject(:parser) { ListParserWithAssignment.new(lexer) }
+        let(:lookahead) { LexerLookahead.new(lexer) }
+        subject(:parser) { ListParserWithAssignment.new(lookahead) }
 
         it "parses lists with assignments" do
-          pending "not sure if  we need an integration test here yet or not"
-          expect(parser.list).to be == [ :a, [ :x, [ :i, :j ] ], :b ]
+          expect(parser.list).to be == [ { :a => :b } ]
         end
       end
 
@@ -28,10 +27,25 @@ module GettingStarted
         }
         let(:lexer) { mock(LL1RecursiveDescentLexer::ListLexer, each: tokens.each) }
 
-        subject(:parser) { ListParserWithAssignment.new(lexer) }
+        let(:lookahead) { LexerLookahead.new(lexer) }
 
-        it "parses assignments" do
-          pending
+        subject(:parser) { ListParserWithAssignment.new(lookahead) }
+
+        context "list with assignment" do
+          let(:token_descriptions) {
+            [
+              { lbrack: "[" },
+              { name:   "a" },
+              { equals: "=" },
+              { name:   "b" },
+              { rbrack: "]" },
+              { eof:    nil }
+            ]
+          }
+
+          specify {
+            expect(parser.list).to be == [ { :a => :b } ]
+          }
         end
       end
     end

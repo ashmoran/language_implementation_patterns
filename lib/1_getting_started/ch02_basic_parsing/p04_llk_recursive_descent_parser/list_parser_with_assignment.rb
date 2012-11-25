@@ -1,6 +1,6 @@
 module GettingStarted
   module BasicParsing
-    module LL1RecursiveDescentParser
+    module LLkRecursiveDescentParser
       class ListParserWithAssignment
         def initialize(lexer)
           @tokens = lexer.each
