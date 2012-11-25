@@ -2,7 +2,7 @@ require 'spec_helper'
 
 require '1_getting_started/ch02_basic_parsing/p04_llk_recursive_descent_parser/list_parser_with_assignment'
 require '1_getting_started/ch02_basic_parsing/p02_ll1_recursive_descent_lexer/list_lexer'
-require_relative '../p02_ll1_recursive_descent_parser/list_parser_contract'
+require_relative '../p03_ll1_recursive_descent_parser/list_parser_contract'
 
 module GettingStarted
   module BasicParsing
@@ -15,7 +15,7 @@ module GettingStarted
         subject(:parser) { ListParserWithAssignment.new(lexer) }
 
         it "parses lists with assignments" do
-          pending "not sure if we need an integration test here yet or not"
+          pending "not sure if  we need an integration test here yet or not"
           expect(parser.list).to be == [ :a, [ :x, [ :i, :j ] ], :b ]
         end
       end
