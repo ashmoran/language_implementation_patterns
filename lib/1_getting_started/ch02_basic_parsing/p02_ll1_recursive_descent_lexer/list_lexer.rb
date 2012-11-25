@@ -70,6 +70,8 @@ module GettingStarted
             yield(Token.new(lbrack: char))
           when ","
             yield(Token.new(comma: char))
+          when "="
+            yield(Token.new(equals: char))
           when "]"
             yield(Token.new(rbrack: char))
           when "a".."z"

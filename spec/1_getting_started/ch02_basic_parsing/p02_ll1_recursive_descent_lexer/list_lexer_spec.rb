@@ -77,6 +77,14 @@ module GettingStarted
             }
           end
 
+          context "equals" do
+            let(:input) { "=" }
+
+            specify {
+              expect(output).to be == [ { equals: "=" }, { eof: nil } ]
+            }
+          end
+
           context "rbrack" do
             let(:input) { "]" }
 
