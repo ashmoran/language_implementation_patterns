@@ -20,6 +20,9 @@ module GettingStarted
       end
 
       describe ListParser do
+        let(:tokens) {
+          LL1RecursiveDescentLexer::Token.descriptions_to_tokens(token_descriptions)
+        }
         let(:lexer) { mock(LL1RecursiveDescentLexer::ListLexer, each: tokens.each) }
 
         subject(:parser) { ListParser.new(lexer) }
@@ -28,7 +31,7 @@ module GettingStarted
         # TDD bootstrapping case, and turned out to be not too difficult to implement
         # compared to the Java example
         context "empty list" do
-          let(:tokens) {
+          let(:token_descriptions) {
             [
               { lbrack: "[" },
               { rbrack: "]" },
@@ -42,7 +45,7 @@ module GettingStarted
         end
 
         context "list with a name" do
-          let(:tokens) {
+          let(:token_descriptions) {
             [
               { lbrack: "[" },
               { name:   "a" },
@@ -57,7 +60,7 @@ module GettingStarted
         end
 
         context "list with a multiple names" do
-          let(:tokens) {
+          let(:token_descriptions) {
             [
               { lbrack: "[" },
               { name:   "a" },
@@ -76,7 +79,7 @@ module GettingStarted
         end
 
         context "list of lists" do
-          let(:tokens) {
+          let(:token_descriptions) {
             [
               { lbrack: "[" },
                 { name:   "a" },
@@ -99,7 +102,7 @@ module GettingStarted
         end
 
         context "list of list of lists to prove to Bobby my code really works" do
-          let(:tokens) {
+          let(:token_descriptions) {
             [
               { lbrack: "[" },
                 { name:   "a" },
@@ -127,7 +130,7 @@ module GettingStarted
 
         context "invalid input" do
           context "no list" do
-            let(:tokens) {
+            let(:token_descriptions) {
               [
                 { eof: nil }
               ]
@@ -139,7 +142,7 @@ module GettingStarted
           end
 
           context "unclosed list" do
-            let(:tokens) {
+            let(:token_descriptions) {
               [
                 { lbrack: "[" },
                 { eof:    nil }
@@ -154,7 +157,7 @@ module GettingStarted
           end
 
           context "missing name before a comma" do
-            let(:tokens) {
+            let(:token_descriptions) {
               [
                 { lbrack: "[" },
                 { comma:  "," },
@@ -171,7 +174,7 @@ module GettingStarted
           end
 
           context "missing name after a comma" do
-            let(:tokens) {
+            let(:token_descriptions) {
               [
                 { lbrack: "[" },
                 { name:   "a" },

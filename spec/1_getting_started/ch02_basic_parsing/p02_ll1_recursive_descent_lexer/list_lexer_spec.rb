@@ -8,11 +8,14 @@ module GettingStarted
       describe ListLexer do
         subject(:lexer) { ListLexer.new(input) }
 
-        let(:output) { [ ] }
+        let(:collected_output) { [ ] }
+        let(:output) {
+          collected_output.map { |token| token.to_hash }
+        }
 
         def tokenize_all_input
           lexer.each do |token|
-            output << token
+            collected_output << token
           end
         end
 
@@ -23,7 +26,7 @@ module GettingStarted
             tokens = lexer.each
             loop do
               begin
-                output << tokens.next
+                collected_output << tokens.next
               rescue StopIteration
                 break
               end

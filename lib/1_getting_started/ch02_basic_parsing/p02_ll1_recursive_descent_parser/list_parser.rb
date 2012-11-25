@@ -32,35 +32,35 @@ module GettingStarted
 
         def elements(collected_list)
           first_element(collected_list)
-          while type(@lookahead) == :comma
+          while @lookahead.type == :comma
             match(:comma)
             element(collected_list)
           end
         end
 
         def first_element(collected_list)
-          case type(@lookahead)
+          case @lookahead.type
           when :name, :lbrack
             element(collected_list)
           when :rbrack
             return
           else
             raise ArgumentError.new(
-              "Expected :lbrack, :name or :rbrack, found #{type(@lookahead).inspect}"
+              "Expected :lbrack, :name or :rbrack, found #{@lookahead.type.inspect}"
             )
           end
         end
 
         def element(collected_list)
-          case type(@lookahead)
+          case @lookahead.type
           when :name
-            collected_list << text(@lookahead).to_sym
+            collected_list << @lookahead.value.to_sym
             match(:name)
           when :lbrack
             collected_list << list
           else
             raise ArgumentError.new(
-              "Expected :name or :lbrack, found #{type(@lookahead).inspect}"
+              "Expected :name or :lbrack, found #{@lookahead.type.inspect}"
             )
           end
         end
@@ -68,11 +68,11 @@ module GettingStarted
         private
 
         def match(expected_type)
-          if type(@lookahead) == expected_type
+          if @lookahead.type == expected_type
             consume
           else
             raise ArgumentError.new(
-              "Expected #{expected_type.inspect}, found #{type(@lookahead).inspect}"
+              "Expected #{expected_type.inspect}, found #{@lookahead.type.inspect}"
             )
           end
         end
@@ -80,14 +80,6 @@ module GettingStarted
         def consume
           @tokens.next
           @lookahead = @tokens.peek
-        end
-
-        def type(token)
-          token.keys.first
-        end
-
-        def text(token)
-          token.values.first
         end
       end
 

@@ -1,3 +1,5 @@
+require_relative 'token'
+
 module GettingStarted
   module BasicParsing
     module LL1RecursiveDescentLexer
@@ -24,7 +26,6 @@ module GettingStarted
       # Oh well, from the outside, it's behaviourally equivalent, ie passes all
       # the same tests it would do if we weren't `redo`ing enumerator blocks.
       # I'm not going to refactor it unless I have to.
-
       class ListLexer
         def initialize(input)
           @input = input
@@ -66,11 +67,11 @@ module GettingStarted
           case char
           when " ", "\t", "\n"
           when "["
-            yield(lbrack: char)
+            yield(Token.new(lbrack: char))
           when ","
-            yield(comma: char)
+            yield(Token.new(comma: char))
           when "]"
-            yield(rbrack: char)
+            yield(Token.new(rbrack: char))
           when "a".."z"
             switch_to_mode(:name)
             throw(:state_changed, :state_changed)
@@ -84,19 +85,19 @@ module GettingStarted
           when "a".."z"
             @name << char
           else
-            yield(name: @name)
+            yield(Token.new(name: @name))
             switch_to_mode(:normal)
             throw(:state_changed, :state_changed)
           end
         end
 
         def finish_normal(&block)
-          yield(eof: nil)
+          yield(Token.new(eof: nil))
         end
 
         def finish_name(&block)
-          yield(name: @name)
-          yield(eof: nil)
+          yield(Token.new(name: @name))
+          yield(Token.new(eof: nil))
         end
 
         # This is an insane way to implement the State pattern, but I've left it in purely
