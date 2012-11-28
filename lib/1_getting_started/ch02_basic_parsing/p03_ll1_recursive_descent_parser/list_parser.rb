@@ -2,7 +2,7 @@ module GettingStarted
   module BasicParsing
     module LL1RecursiveDescentParser
 
-      # Implements Pattern 2: LL(1) Recursive-Descent Lexer
+      # Implements Pattern 3: LL(1) Recursive-Descent Parser
       #
       # Two major differences from the book examples:
       #
@@ -18,8 +18,8 @@ module GettingStarted
       #   parser gives you).
       class ListParser
         def initialize(lexer)
-          @tokens = lexer.each
-          @lookahead = @tokens.peek
+          @lexer = lexer
+          @lookahead = @lexer.next
         end
 
         def list
@@ -78,8 +78,7 @@ module GettingStarted
         end
 
         def consume
-          @tokens.next
-          @lookahead = @tokens.peek
+          @lookahead = @lexer.next
         end
       end
 

@@ -14,12 +14,6 @@ module GettingStarted
           collected_output.map { |token| token.to_hash }
         }
 
-        def tokenize_all_input
-          lexer.each do |token|
-            collected_output << token
-          end
-        end
-
         it_behaves_like "a ListLexer"
       end
     end

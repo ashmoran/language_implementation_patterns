@@ -29,24 +29,28 @@ module GettingStarted
       class ListLexer
         def initialize(input)
           @input = input
+
+          # Hack to work around the fact I didn't implement this as a pull system
+          @tokens = tokenize_all.each
         end
 
-        # Kludge version of #each because I implemented this wrong first-time round:
-        # the block_given? check lets us keep the original examples while also
-        # providing the Enumerator the (properly-written) Parser needs
-        def each(&block)
-          if block_given?
-            tokenize(&block)
-          else
-            [ ].tap do |tokens|
-              tokenize do |token|
-                tokens << token
-              end
-            end.each
-          end
+        def peek
+          @tokens.peek
+        end
+
+        def next
+          @tokens.next
         end
 
         private
+
+        def tokenize_all
+          [ ].tap do |tokens|
+            tokenize do |token|
+              tokens << token
+            end
+          end
+        end
 
         def tokenize(&block)
           switch_to_mode(:normal)

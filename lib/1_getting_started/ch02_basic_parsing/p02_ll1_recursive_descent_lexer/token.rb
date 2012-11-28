@@ -19,6 +19,10 @@ module GettingStarted
           { @type => @value }
         end
 
+        def inspect
+          @type.inspect
+        end
+
         def ==(other)
           @type == other.type && @value == other.value
         end

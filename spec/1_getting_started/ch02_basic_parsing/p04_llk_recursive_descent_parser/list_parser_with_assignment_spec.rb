@@ -20,16 +20,14 @@ module GettingStarted
       end
 
       describe ListParserWithAssignment do
-        it_behaves_like "a ListParser"
-
         let(:tokens) {
           LL1RecursiveDescentLexer::Token.descriptions_to_tokens(token_descriptions)
         }
-        let(:lexer) { mock(LL1RecursiveDescentLexer::ListLexer, each: tokens.each) }
-
+        let(:lexer) { tokens.each }
         let(:lookahead) { LexerLookahead.new(lexer) }
-
         subject(:parser) { ListParserWithAssignment.new(lookahead) }
+
+        it_behaves_like "a ListParser"
 
         context "list with assignment" do
           let(:token_descriptions) {

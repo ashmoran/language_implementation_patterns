@@ -10,9 +10,10 @@ module GettingStarted
 
         its(:type)    { should be == :token_type }
         its(:value)   { should be == "token_value" }
+        its(:inspect) { should be == ":token_type" } # Only used for errors so far
         its(:to_hash) { should be == { token_type: "token_value" } }
 
-        describe "==" do
+        describe "#==" do
           it "knows equality" do
             expect(token).to be == Token.new(token_type: "token_value")
           end

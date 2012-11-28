@@ -25,7 +25,7 @@ module GettingStarted
         let(:tokens) {
           LL1RecursiveDescentLexer::Token.descriptions_to_tokens(token_descriptions)
         }
-        let(:lexer) { mock(LL1RecursiveDescentLexer::ListLexer, each: tokens.each) }
+        let(:lexer) { tokens.each }
 
         subject(:parser) { ListParser.new(lexer) }
       end

@@ -73,6 +73,26 @@ shared_examples_for "a ListParser" do
     }
   end
 
+  context "empty list in a list" do
+    let(:token_descriptions) {
+      [
+        { lbrack: "[" },
+          { name:   "a" },
+          { comma:  "," },
+            { lbrack: "[" },
+            { rbrack: "]" },
+          { comma:  "," },
+          { name:   "b" },
+        { rbrack: "]" },
+        { eof:    nil }
+      ]
+    }
+
+    specify {
+      expect(parser.list).to be == [ :a, [ ], :b ]
+    }
+  end
+
   context "list of list of lists to prove to Bobby my code really works" do
     let(:token_descriptions) {
       [
