@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 require '1_getting_started/ch02_basic_parsing/p04_llk_recursive_descent_parser/list_parser_with_assignment'
+require '1_getting_started/ch02_basic_parsing/p04_llk_recursive_descent_parser/lexer_lookahead'
 require '1_getting_started/ch02_basic_parsing/p02_ll1_recursive_descent_lexer/list_lexer'
 require_relative '../p03_ll1_recursive_descent_parser/list_parser_contract'
 

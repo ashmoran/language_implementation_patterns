@@ -1,5 +1,3 @@
-require_relative 'lexer_lookahead'
-
 module GettingStarted
   module BasicParsing
     module LLkRecursiveDescentParser
