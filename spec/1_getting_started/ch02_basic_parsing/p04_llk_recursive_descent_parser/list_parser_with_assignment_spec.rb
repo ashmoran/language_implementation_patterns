@@ -4,6 +4,7 @@ require '1_getting_started/ch02_basic_parsing/p04_llk_recursive_descent_parser/l
 require '1_getting_started/ch02_basic_parsing/p04_llk_recursive_descent_parser/lexer_lookahead'
 require '1_getting_started/ch02_basic_parsing/p02_ll1_recursive_descent_lexer/list_lexer'
 require_relative '../p03_ll1_recursive_descent_parser/list_parser_contract'
+require_relative 'list_parser_assignment_contract'
 
 module GettingStarted
   module BasicParsing
@@ -29,23 +30,7 @@ module GettingStarted
         subject(:parser) { ListParserWithAssignment.new(lookahead) }
 
         it_behaves_like "a ListParser"
-
-        context "list with assignment" do
-          let(:token_descriptions) {
-            [
-              { lbrack: "[" },
-              { name:   "a" },
-              { equals: "=" },
-              { name:   "b" },
-              { rbrack: "]" },
-              { eof:    nil }
-            ]
-          }
-
-          specify {
-            expect(parser.list).to be == [ { :a => :b } ]
-          }
-        end
+        it_behaves_like "a ListParser with assignment"
       end
     end
   end
