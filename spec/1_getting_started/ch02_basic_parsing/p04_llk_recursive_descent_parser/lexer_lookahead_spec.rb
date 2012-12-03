@@ -8,8 +8,6 @@ module GettingStarted
   module BasicParsing
     module LLkRecursiveDescentParser
       shared_examples_for "LexerLookahead#peek" do
-        let(:input) { "[ a = b ]" }
-
         example do
           expect(lexer.peek.value).to be == "["
         end
@@ -60,6 +58,7 @@ module GettingStarted
         end
 
         context "wrapping a ListLexer" do
+          let(:input) { "[ a = b ]" }
           let(:underlying_lexer) { LL1RecursiveDescentLexer::ListLexer.new(input) }
           subject(:lexer) { LexerLookahead.new(underlying_lexer) }
 

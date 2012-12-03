@@ -1,10 +1,44 @@
 module GettingStarted
   module EnhancedParsing
     module BacktrackingParser
+      class NoViableAlternativeError < RuntimeError; end
+      class RecognitionError < ArgumentError; end
 
       class ListParserWithParallelAssignment
         def initialize(replayable_lexer)
           @lexer = replayable_lexer
+        end
+
+        def stat
+          if speculate_stat_list
+            matched_list = list
+            match(:eof)
+            matched_list
+          elsif speculate_stat_parallel_assigment
+            matched_parallel_assigment = parallel_assignment
+            match(:eof)
+            matched_parallel_assigment
+          else
+            raise NoViableAlternativeError.new("Expecting <list> or <parallel assignment>")
+          end
+        end
+
+        def speculate_stat_list
+          @lexer.speculate do
+            list
+            match(:eof)
+          end
+        rescue ArgumentError => e
+          false
+        end
+
+        def speculate_stat_parallel_assigment
+          @lexer.speculate do
+            parallel_assignment
+            match(:eof)
+          end
+        rescue ArgumentError => e
+          false
         end
 
         def list
@@ -13,6 +47,13 @@ module GettingStarted
             elements(collected_list)
             match(:rbrack)
           end
+        end
+
+        def parallel_assignment
+          lhs = list
+          match(:equals)
+          rhs = list
+          { lhs => rhs }
         end
 
         def elements(collected_list)

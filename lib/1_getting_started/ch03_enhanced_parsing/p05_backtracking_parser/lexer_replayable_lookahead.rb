@@ -1,3 +1,5 @@
+require_relative 'replayable_buffer'
+
 module GettingStarted
   module EnhancedParsing
     module BacktrackingParser
@@ -6,7 +8,7 @@ module GettingStarted
         def initialize(lexer)
           @lexer        = lexer
           @lexer_empty  = false
-          @buffer       = [ ]
+          @buffer       = ReplayableBuffer.new
         end
 
         def peek(lookahead_distance = 1)
@@ -17,6 +19,13 @@ module GettingStarted
         def next
           fill_buffer(1)
           consume
+        end
+
+        def speculate(&block)
+          @buffer.mark
+          yield
+        ensure
+          @buffer.release
         end
 
         private

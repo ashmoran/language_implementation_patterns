@@ -16,19 +16,21 @@ module GettingStarted
         let(:lookahead) { LexerReplayableLookahead.new(lexer) }
         subject(:parser) { ListParserWithParallelAssignment.new(lookahead) }
 
-        context "a list" do
-          let(:input) { "[ a = b, c, d ]" }
+        describe "statements" do
+          context "a list" do
+            let(:input) { "[ a = b, c, d ]" }
 
-          example do
-            expect(parser.stat).to be == [ { :a => :b }, :c, :d ]
+            example do
+              expect(parser.stat).to be == [ { :a => :b }, :c, :d ]
+            end
           end
-        end
 
-        context "a parallel assignment" do
-          let(:input) { "[ a, b ] = [ c, d ]" }
+          context "a parallel assignment" do
+            let(:input) { "[ a, b ] = [ c, d ]" }
 
-          example do
-            expect(parser.stat).to be == { [ :a, :b ] => [ :c, :d ] }
+            example do
+              expect(parser.stat).to be == { [ :a, :b ] => [ :c, :d ] }
+            end
           end
         end
       end
@@ -72,11 +74,33 @@ module GettingStarted
                 { lbrack: "[" },
                   { name:   "c" }, { comma:  "," }, { name:   "d" },
                 { rbrack: "]" },
+                { eof:    nil }
               ]
             }
 
             specify {
               expect(parser.stat).to be == { [ :a, :b ] => [ :c, :d ] }
+            }
+          end
+
+          context "invalid statement" do
+            # "[ a ] b"
+            let(:token_descriptions) {
+              [
+                { lbrack: "[" },
+                { name:   "a" },
+                { rbrack: "]" },
+                { name:   "b" },
+                { eof:    nil }
+              ]
+            }
+
+            specify {
+              expect {
+                parser.stat
+              }.to raise_error(
+                NoViableAlternativeError, "Expecting <list> or <parallel assignment>"
+              )
             }
           end
         end
