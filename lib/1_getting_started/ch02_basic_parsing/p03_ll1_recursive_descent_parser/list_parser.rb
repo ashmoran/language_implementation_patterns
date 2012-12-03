@@ -1,3 +1,5 @@
+require '1_getting_started/recognition_error'
+
 module GettingStarted
   module BasicParsing
     module LL1RecursiveDescentParser
@@ -45,7 +47,7 @@ module GettingStarted
           when :rbrack
             return
           else
-            raise ArgumentError.new(
+            raise RecognitionError.new(
               "Expected :lbrack, :name or :rbrack, found #{@lookahead.type.inspect}"
             )
           end
@@ -59,7 +61,7 @@ module GettingStarted
           when :lbrack
             collected_list << list
           else
-            raise ArgumentError.new(
+            raise RecognitionError.new(
               "Expected :name or :lbrack, found #{@lookahead.type.inspect}"
             )
           end
@@ -71,7 +73,7 @@ module GettingStarted
           if @lookahead.type == expected_type
             consume
           else
-            raise ArgumentError.new(
+            raise RecognitionError.new(
               "Expected #{expected_type.inspect}, found #{@lookahead.type.inspect}"
             )
           end

@@ -1,3 +1,5 @@
+require '1_getting_started/recognition_error'
+
 module GettingStarted
   module BasicParsing
     module LLkRecursiveDescentParser
@@ -37,7 +39,7 @@ module GettingStarted
           when :rbrack
             return
           else
-            raise ArgumentError.new(
+            raise RecognitionError.new(
               "Expected :lbrack, :name or :rbrack, found #{@lexer.peek.inspect}"
             )
           end
@@ -53,7 +55,7 @@ module GettingStarted
           elsif @lexer.peek.type == :lbrack
             collected_list << list
           else
-            raise ArgumentError.new(
+            raise RecognitionError.new(
               "Expected :name or :lbrack, found #{@lexer.peek.inspect}"
             )
           end
@@ -65,7 +67,7 @@ module GettingStarted
           if @lexer.peek.type == expected_type
             consume
           else
-            raise ArgumentError.new(
+            raise RecognitionError.new(
               "Expected #{expected_type.inspect}, found #{@lexer.peek.inspect}"
             )
           end

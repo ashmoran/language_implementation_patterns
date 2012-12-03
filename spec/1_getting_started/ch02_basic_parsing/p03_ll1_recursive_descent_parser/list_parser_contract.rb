@@ -129,7 +129,7 @@ shared_examples_for "a ListParser" do
       }
 
       specify {
-        expect { parser.list }.to raise_error(ArgumentError, "Expected :lbrack, found :eof")
+        expect { parser.list }.to raise_error(RecognitionError, "Expected :lbrack, found :eof")
       }
     end
 
@@ -143,7 +143,7 @@ shared_examples_for "a ListParser" do
 
       specify {
         expect { parser.list }.to raise_error(
-          ArgumentError, "Expected :lbrack, :name or :rbrack, found :eof"
+          RecognitionError, "Expected :lbrack, :name or :rbrack, found :eof"
         )
       }
     end
@@ -160,7 +160,7 @@ shared_examples_for "a ListParser" do
 
       specify {
         expect { parser.list }.to raise_error(
-          ArgumentError, "Expected :lbrack, :name or :rbrack, found :comma"
+          RecognitionError, "Expected :lbrack, :name or :rbrack, found :comma"
         )
       }
     end
@@ -178,7 +178,7 @@ shared_examples_for "a ListParser" do
 
       specify {
         expect { parser.list }.to raise_error(
-          ArgumentError, "Expected :name or :lbrack, found :rbrack"
+          RecognitionError, "Expected :name or :lbrack, found :rbrack"
         )
       }
     end

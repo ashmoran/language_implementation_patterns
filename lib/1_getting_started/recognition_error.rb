@@ -1,0 +1,1 @@
+class RecognitionError < ArgumentError; end
