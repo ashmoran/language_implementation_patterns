@@ -1,4 +1,4 @@
-require '1_getting_started/recognition_error'
+require '1_getting_started/errors'
 
 module GettingStarted
   module BasicParsing

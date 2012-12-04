@@ -1,22 +1,26 @@
 require '1_getting_started/errors'
 
+# UNFINISHED!!!
+#
+# I got bored of this - it's a big refactoring for a relatively minor change,
+# and I'm not primarily concerned with how to implement parsers. But I've left
+# the unfunished code here in case I decide to return to it some time.
+# It passes all the tests :)
+
 module GettingStarted
   module EnhancedParsing
-    module BacktrackingParser
-      class ListParserWithParallelAssignment
+    module MemoizingParser
+
+      class MemoizingListParser
         def initialize(replayable_lexer)
           @lexer = replayable_lexer
         end
 
         def stat
           if speculate_stat_list
-            matched_list = list
-            match(:eof)
-            matched_list
+            stat_list
           elsif speculate_stat_parallel_assigment
-            matched_parallel_assigment = parallel_assignment
-            match(:eof)
-            matched_parallel_assigment
+            stat_parallel_assignment
           else
             raise NoViableAlternativeError.new("Expecting <list> or <parallel assignment>")
           end
@@ -24,8 +28,7 @@ module GettingStarted
 
         def speculate_stat_list
           @lexer.speculate do
-            list
-            match(:eof)
+            stat_list
           end
         rescue RecognitionError => e
           false
@@ -33,14 +36,47 @@ module GettingStarted
 
         def speculate_stat_parallel_assigment
           @lexer.speculate do
-            parallel_assignment
-            match(:eof)
+            stat_parallel_assignment
           end
         rescue RecognitionError => e
           false
         end
 
+        def stat_list
+          matched_list = list
+          match(:eof)
+          matched_list
+        end
+
+        def stat_parallel_assignment
+          matched_parallel_assigment = parallel_assignment
+          match(:eof)
+          matched_parallel_assigment
+        end
+
         def list
+          failed = false
+
+          @lexer.if_speculating do
+            return if already_parsed?(:list)
+          end
+
+          parsed_list = _list
+
+          @lexer.if_speculating do
+            memoize(:list, parsed_list)
+          end
+
+          parsed_list
+        rescue RecognitionError => e
+          @lexer.if_speculating do
+            memoize_failure(:list)
+          end
+
+          raise
+        end
+
+        def _list
           [ ].tap do |collected_list|
             match(:lbrack)
             elements(collected_list)
@@ -93,6 +129,18 @@ module GettingStarted
         end
 
         private
+
+        def already_parsed?(expression_type)
+          false
+        end
+
+        def memoize(expression_type, expression)
+          expression
+        end
+
+        def memoize_failure(expression_type)
+          nil
+        end
 
         def match(expected_type)
           if @lexer.peek.type == expected_type

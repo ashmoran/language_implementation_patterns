@@ -65,6 +65,36 @@ module GettingStarted
           expect(lexer.peek.value).to be == "["
         }
 
+        describe "#if_speculating", focus: true do
+          specify {
+            should_not_receive(:was_speculating)
+            lexer.if_speculating do
+              was_speculating
+            end
+          }
+
+          specify {
+            should_receive(:was_speculating)
+            lexer.speculate do
+              lexer.if_speculating do
+                was_speculating
+              end
+            end
+          }
+
+          specify {
+            should_receive(:was_speculating)
+            lexer.speculate do
+              lexer.speculate do
+                # nothing here
+              end
+              lexer.if_speculating do
+                was_speculating
+              end
+            end
+          }
+        end
+
         describe "error handling" do
           it "(re-)raises errors" do
             expect {

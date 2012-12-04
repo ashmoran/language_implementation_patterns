@@ -9,6 +9,7 @@ module GettingStarted
           @lexer        = lexer
           @lexer_empty  = false
           @buffer       = ReplayableBuffer.new
+          @speculating  = [ false ]
         end
 
         def peek(lookahead_distance = 1)
@@ -22,10 +23,16 @@ module GettingStarted
         end
 
         def speculate(&block)
+          @speculating.push(true)
           @buffer.mark
           yield
         ensure
+          @speculating.pop
           @buffer.release
+        end
+
+        def if_speculating(&block)
+          yield if @speculating.last
         end
 
         private
