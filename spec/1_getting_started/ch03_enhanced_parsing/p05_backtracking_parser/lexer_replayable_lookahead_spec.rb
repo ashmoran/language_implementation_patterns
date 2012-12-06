@@ -65,7 +65,7 @@ module GettingStarted
           expect(lexer.peek.value).to be == "["
         }
 
-        describe "#if_speculating", focus: true do
+        describe "#if_speculating" do
           specify {
             should_not_receive(:was_speculating)
             lexer.if_speculating do
