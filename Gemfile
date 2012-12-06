@@ -19,6 +19,7 @@ group :development do
 	gem 'guard-rspec'
 	gem 'fuubar'
 	gem 'fakefs'
+	gem 'lstrip-on-steroids'
 
 	gem 'pry'
 

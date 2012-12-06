@@ -39,6 +39,7 @@ GEM
       rspec (~> 2.11)
     json (1.7.5)
     listen (0.6.0)
+    lstrip-on-steroids (1.0.2)
     lumberjack (1.0.2)
     method_source (0.8.1)
     pry (0.9.10)
@@ -75,6 +76,7 @@ DEPENDENCIES
   guard-cucumber
   guard-rspec
   listen
+  lstrip-on-steroids
   pry
   rb-fsevent
   rspec
