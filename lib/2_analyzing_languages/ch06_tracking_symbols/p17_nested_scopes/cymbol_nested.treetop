@@ -1,0 +1,21 @@
+module AnalyzingLanguages::TrackingSymbols::NestedScopes
+  grammar CymbolNested
+    rule program
+      (
+        blank
+      )*
+    end
+
+    rule blank
+      (_ "\n"? / _? comment_to_eol / "\n")+
+    end
+
+    rule comment_to_eol
+      "//" (!"\n" .)* "\n"?
+    end
+
+    rule _
+      [ \t]+
+    end
+  end
+end
