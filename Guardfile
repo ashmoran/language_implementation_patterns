@@ -10,4 +10,9 @@ guard 'rspec', cli: "--color --format Fuubar" do
   watch(%r{^lib/(.+)\.rb})          { |m| "spec/#{m[1]}_spec.rb" }
   watch('spec/spec_helper.rb')      { "spec" }
   watch(%r{spec/support/.+\.rb})    { "spec" }
+
+  watch(%r{^lib/2_analyzing_languages/ch06_tracking_symbols/p16_monolithic_scope/cymbol_monolithic.treetop}) {
+    "spec/2_analyzing_languages/ch06_tracking_symbols/p16_monolithic_scope/cymbol_spec.rb"
+  }
+
 end

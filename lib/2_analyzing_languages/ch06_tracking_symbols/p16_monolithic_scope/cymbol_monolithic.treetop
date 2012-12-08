@@ -1,0 +1,43 @@
+module AnalyzingLanguages::TrackingSymbols::MonolithicScope
+  grammar CymbolMonolithic
+    rule program
+      var_declaration+
+    end
+
+    rule var_declaration
+      type:type __ var_name:id _ assignment:('=' _ addition_expression _)? ';' [ \n]* <VarDeclaration>
+    end
+
+    rule type
+      'int'   <CymbolSymbol>
+      /
+      'float' <CymbolSymbol>
+    end
+
+    rule addition_expression
+      expression _ ('+' _ expression)*
+    end
+
+    rule expression
+      int
+      /
+      id
+    end
+
+    rule int
+      [0-9]
+    end
+
+    rule id
+      [a-zA-Z]+ <CymbolSymbol>
+    end
+
+    rule __
+      [ ]+
+    end
+
+    rule _
+      [ ]*
+    end
+  end
+end
