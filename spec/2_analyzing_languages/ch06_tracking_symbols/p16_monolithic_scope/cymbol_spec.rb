@@ -23,10 +23,6 @@ module AnalyzingLanguages
           }
         end
 
-        context "multi-line input" do
-
-        end
-
         context "an initialized variable" do
           let(:source) { "int i = 9;" }
 
