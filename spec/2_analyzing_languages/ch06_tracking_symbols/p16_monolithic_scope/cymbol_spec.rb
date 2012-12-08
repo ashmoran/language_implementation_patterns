@@ -71,7 +71,8 @@ module AnalyzingLanguages
       end
 
       describe Cymbol, "from the book" do
-        subject(:cymbol) { Cymbol.new(symbol_table) }
+        let(:symbol_table) { SymbolTable.new }
+        subject(:cymbol) { Cymbol.new(symbol_table_for_parser) }
 
         let(:source) {
           -%{
@@ -82,12 +83,13 @@ module AnalyzingLanguages
         }
 
         before(:each) do
+          # Bypass any logging
           symbol_table.define(LanguageSymbol.new(:int))
           symbol_table.define(LanguageSymbol.new(:float))
         end
 
         context "but with no logging" do
-          let(:symbol_table) { SymbolTable.new }
+          let(:symbol_table_for_parser) { symbol_table }
 
           specify {
             expect { cymbol.parse(source) }.to_not raise_error
@@ -101,8 +103,7 @@ module AnalyzingLanguages
             output_io.read.chomp
           end
 
-          let(:global_scope_symbol_table) { SymbolTable.new }
-          let(:symbol_table) { SymbolTableLogger.new(global_scope_symbol_table, output_io) }
+          let(:symbol_table_for_parser) { SymbolTableLogger.new(symbol_table, output_io) }
 
           # Changed slightly because to produce the same output as the book
           # requires an inordinate increase in complexity in the code
@@ -133,7 +134,7 @@ module AnalyzingLanguages
           specify {
             cymbol.parse(source)
 
-            expect(global_scope_symbol_table.to_s).to be ==
+            expect(symbol_table.to_s).to be ==
               "globals: {float=float, i=<i:int>, int=int, j=<j:float>, k=<k:int>}"
           }
         end

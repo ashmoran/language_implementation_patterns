@@ -18,45 +18,27 @@ module AnalyzingLanguages
         subject(:logger) { SymbolTableLogger.new(symbol_table, output_io) }
 
         describe "#resolve" do
-          context "location given" do
-            specify {
-              symbol_table.should_receive(:resolve).with(:symbol_name)
-              logger.resolve(:symbol_name).should be == :resolved_symbol
-            }
+          specify {
+            symbol_table.should_receive(:resolve).with(:symbol_name)
+            logger.resolve(:symbol_name).should be == :resolved_symbol
+          }
 
-            specify {
-              logger.resolve(:symbol_name, location: "line 1")
-              expect(output).to be == "line 1: ref resolved_symbol"
-            }
-          end
-
-          context "no location given (eg built-in types)" do
-            specify {
-              logger.resolve(:symbol_name)
-              expect(output).to be_empty
-            }
-          end
+          specify {
+            logger.resolve(:symbol_name, location: "line 1")
+            expect(output).to be == "line 1: ref resolved_symbol"
+          }
         end
 
         describe "#define" do
-          context "location_given" do
-            specify {
-              logger.define(:symbol, location: "line 1")
-              expect(output).to be == "line 1: def symbol"
-            }
+          specify {
+            logger.define(:symbol, location: "line 1")
+            expect(output).to be == "line 1: def symbol"
+          }
 
-            specify {
-              symbol_table.should_receive(:define).with(:symbol)
-              logger.define(:symbol)
-            }
-          end
-
-          context "no location given (eg built-in types)" do
-            specify {
-              logger.define(:symbol)
-              expect(output).to be_empty
-            }
-          end
+          specify {
+            symbol_table.should_receive(:define).with(:symbol)
+            logger.define(:symbol)
+          }
         end
       end
     end

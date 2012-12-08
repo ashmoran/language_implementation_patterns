@@ -27,9 +27,7 @@ module AnalyzingLanguages
         private
 
         def log(event, item, metadata)
-          if metadata[:location]
-            @output_io.puts("#{metadata[:location]}: #{event} #{item}")
-          end
+          @output_io.puts("#{metadata[:location]}: #{event} #{item}")
         end
       end
     end
