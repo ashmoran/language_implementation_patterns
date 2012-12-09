@@ -3,7 +3,99 @@ module AnalyzingLanguages::TrackingSymbols::NestedScopes
     rule program
       (
         blank
+        /
+        statement
+        /
+        method_definition
+        /
+        block
       )*
+    end
+
+    rule block
+      "{"
+      blank?
+      (
+        (statement / block)
+        blank?
+      )*
+      "}"
+    end
+
+    rule statement
+      (
+        method_call
+        /
+        var_declaration
+        /
+        assignment
+        /
+        return
+      )
+      _?
+      ";"
+    end
+
+    rule method_definition
+      identifier _ identifier "(" _? parameter_list? _? ")" blank? block
+    end
+
+    rule parameter_list
+      method_parameter (_? "," _? method_parameter)*
+    end
+
+    rule method_parameter
+      type _ identifier
+    end
+
+    rule return
+      "return" _ additive_expression
+    end
+
+    rule method_call
+      identifier "(" _? argument_list? _? ")"
+    end
+
+    rule argument_list
+      method_argument  (_? "," _? method_argument)*
+    end
+
+    rule method_argument
+      additive_expression
+    end
+
+    rule var_declaration
+      type _ identifier var_initialization?
+    end
+
+    rule var_initialization
+      _? "=" _? additive_expression
+    end
+
+    rule assignment
+      identifier _? "=" _? additive_expression
+    end
+
+    rule additive_expression
+      expression _? ("+" _? expression)*
+    end
+
+    rule expression
+      integer_literal
+      /
+      identifier
+    end
+
+    rule type
+      "int" / "float"
+    end
+
+    rule identifier
+      [a-z]+
+    end
+
+    rule integer_literal
+      [0-9]+
     end
 
     rule blank
