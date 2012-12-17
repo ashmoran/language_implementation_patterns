@@ -1,16 +1,16 @@
+require_relative 'cymbol2_parser'
+
 module AnalyzingLanguages
   module TrackingSymbols
     module NestedScopes
 
       class Cymbol2
-        class Tree
-          def walk
-            # Get us failing
-          end
+        def initialize
+          @parser = CymbolNestedParser.new
         end
 
         def parse(source)
-          Tree.new
+          @parser.parse(source)
         end
       end
 

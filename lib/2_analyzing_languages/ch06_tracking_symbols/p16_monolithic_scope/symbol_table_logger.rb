@@ -17,11 +17,30 @@ module AnalyzingLanguages
           @symbol_table.resolve(symbol_name).tap do |symbol|
             log("ref", symbol, metadata)
           end
+        rescue RuntimeError => e # Eek! Seems we were using too geneneral an error class...
+          log("ref [failed]", symbol_name, metadata)
         end
 
         def define(symbol, metadata = { })
           log("def", symbol, metadata)
           @symbol_table.define(symbol)
+        end
+
+        # Hacked in as part of the NestedScopes code...
+        # I'm not taking too much care to refactor now
+        def define_as_scope(symbol, metadata = { })
+          log("defscope", symbol, metadata)
+          @symbol_table.define_as_scope(symbol)
+        end
+
+        # Also hacked in
+        def push_scope
+          @symbol_table.push_scope
+        end
+
+        # And this
+        def pop_scope
+          @symbol_table.pop_scope
         end
 
         private

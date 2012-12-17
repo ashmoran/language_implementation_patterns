@@ -15,37 +15,40 @@ module AnalyzingLanguages::TrackingSymbols::NestedScopes
     rule block
       "{"
       blank?
-      (
+      statements:(
         (statement / block)
         blank?
       )*
-      "}"
+      "}" <CymbolBlock>
     end
 
     rule statement
       (
+        return
+        /
         method_call
         /
         var_declaration
         /
         assignment
-        /
-        return
       )
       _?
       ";"
     end
 
     rule method_definition
-      identifier _ identifier "(" _? parameter_list? _? ")" blank? block
+      type:identifier _ name:identifier
+      "(" _? parameters:parameter_list? _? ")" blank?
+      body:block <MethodDefinition>
     end
 
     rule parameter_list
-      method_parameter (_? "," _? method_parameter)*
+      first_parameter:method_parameter
+      rest_parameters:(_? "," _? parameter:method_parameter)* <ParameterList>
     end
 
     rule method_parameter
-      type _ identifier
+      type:identifier _ name:identifier
     end
 
     rule return
@@ -65,7 +68,7 @@ module AnalyzingLanguages::TrackingSymbols::NestedScopes
     end
 
     rule var_declaration
-      type _ identifier var_initialization?
+      type:identifier _ var_name:identifier initialization:var_initialization? <VarDeclaration>
     end
 
     rule var_initialization
@@ -91,7 +94,7 @@ module AnalyzingLanguages::TrackingSymbols::NestedScopes
     end
 
     rule identifier
-      [a-z]+
+      [a-z]+ <CymbolSymbol>
     end
 
     rule integer_literal
